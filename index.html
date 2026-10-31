@@ -219,18 +219,21 @@
       const dotsContainer = document.getElementById(config.dots);
       const slider = document.getElementById(config.slider);
 
-      function update() {
-        const file = config.images[current];
+     function update() {
+  const file = config.images[current];
 
-        image.src = file;
-        image.alt = config.name + " photo " + (current + 1);
-        link.href = file;
-        counter.textContent = (current + 1) + " / " + config.images.length;
+  // 
+  image.src = "";
+  image.src = file + "?slide=" + current;
 
-        [...dotsContainer.children].forEach((dot, index) => {
-          dot.classList.toggle("active", index === current);
-        });
-      }
+  image.alt = config.name + " photo " + (current + 1);
+  link.href = file;
+  counter.textContent = (current + 1) + " / " + config.images.length;
+
+  [...dotsContainer.children].forEach((dot, index) => {
+    dot.classList.toggle("active", index === current);
+  });
+}
 
       function goTo(index) {
         current = (index + config.images.length) % config.images.length;
