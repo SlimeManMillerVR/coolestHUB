@@ -2,328 +2,329 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Coolest's Photos</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coolest's Photos</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    body {
-      margin: 0;
-      background: #111;
-      color: white;
-      font-family: Arial, sans-serif;
-      overflow: hidden;
-    }
+html, body {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background: #111;
+  color: white;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
 
-    header {
-      text-align: center;
-      padding: 25px 15px 20px;
-    }
+header {
+  height: 100px;
+  padding: 22px 15px 15px;
+  text-align: center;
+}
 
-    header h1 {
-      font-size: 30px;
-      margin: 0;
-    }
+header h1 {
+  margin: 0;
+  font-size: 30px;
+}
 
-    header hr {
-      border: none;
-      height: 2px;
-      background: white;
-      width: 85%;
-      max-width: 700px;
-      margin: 20px auto 0;
-    }
+header hr {
+  width: 85%;
+  max-width: 700px;
+  height: 2px;
+  border: 0;
+  background: white;
+  margin: 18px auto 0;
+}
 
-    /* Main horizontal scrolling sections */
-    .sections {
-      display: flex;
-      width: 100%;
-      height: calc(100vh - 100px);
-      overflow-x: scroll;
-      overflow-y: hidden;
-      scroll-snap-type: x mandatory;
-      scroll-behavior: smooth;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: none;
-      touch-action: pan-x;
-    }
+/* Horizontal section scrolling */
+.sections {
+  display: flex;
+  width: 100%;
+  height: calc(100dvh - 100px);
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  touch-action: pan-x;
+}
 
-    .sections::-webkit-scrollbar {
-      display: none;
-    }
+.sections::-webkit-scrollbar {
+  display: none;
+}
 
-    .page {
-      flex: 0 0 100%;
-      min-width: 100%;
-      width: 100%;
-      height: 100%;
-      overflow-y: auto;
-      scroll-snap-align: start;
-      scroll-snap-stop: always;
-      padding: 20px;
-    }
+.page {
+  flex: 0 0 100%;
+  width: 100%;
+  min-width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  scroll-snap-align: start;
+  padding: 20px;
+}
 
-    .page h2 {
-      text-align: center;
-      font-size: 26px;
-      margin: 10px 0 25px;
-    }
+.page h2 {
+  text-align: center;
+  font-size: 26px;
+  margin: 10px 0 25px;
+}
 
-    /* HERO X HERO photo slider */
-    .slider {
-      position: relative;
-      max-width: 850px;
-      margin: auto;
-      overflow: hidden;
-      border-radius: 15px;
-      background: #222;
-      touch-action: pan-y;
-    }
+/* HERO X HERO slider */
+.slider {
+  position: relative;
+  width: 100%;
+  max-width: 850px;
+  margin: auto;
+  overflow: hidden;
+  border-radius: 15px;
+  background: #222;
+  touch-action: pan-y;
+}
 
-    .slides {
-      display: flex;
-      transition: transform 0.4s ease;
-    }
+.slides {
+  display: flex;
+  width: 100%;
+  transition: transform 0.35s ease;
+}
 
-    .slides img {
-      flex: 0 0 100%;
-      width: 100%;
-      height: 520px;
-      object-fit: contain;
-      cursor: pointer;
-    }
+.slides img {
+  flex: 0 0 100%;
+  min-width: 100%;
+  width: 100%;
+  height: min(520px, 60vh);
+  object-fit: contain;
+  cursor: pointer;
+}
 
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 45px;
-      height: 45px;
-      border: none;
-      border-radius: 50%;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      font-size: 24px;
-      cursor: pointer;
-      z-index: 2;
-    }
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 45px;
+  height: 45px;
+  border: none;
+  border-radius: 50%;
+  background: rgba(0,0,0,0.7);
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+}
 
-    .prev {
-      left: 12px;
-    }
+.prev {
+  left: 12px;
+}
 
-    .next {
-      right: 12px;
-    }
+.next {
+  right: 12px;
+}
 
-    .dots {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 20px;
-    }
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
 
-    .dot {
-      position: static;
-      transform: none;
-      width: 10px;
-      height: 10px;
-      padding: 0;
-      border: none;
-      border-radius: 50%;
-      background: #666;
-      cursor: pointer;
-    }
+.dot {
+  position: static;
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: none;
+  border-radius: 50%;
+  background: #666;
+  cursor: pointer;
+}
 
-    .dot.active {
-      background: white;
-      transform: scale(1.3);
-    }
+.dot.active {
+  background: white;
+  transform: scale(1.3);
+}
 
-    .counter {
-      text-align: center;
-      color: #aaa;
-      margin-top: 15px;
-    }
+.counter {
+  text-align: center;
+  color: #aaa;
+  margin-top: 15px;
+}
 
-    /* SOON section */
-    .soon {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 60vh;
-      font-size: 45px;
-      font-weight: bold;
-      letter-spacing: 3px;
-    }
+/* SOON section */
+.soon {
+  min-height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 45px;
+  font-weight: bold;
+  letter-spacing: 3px;
+}
 
-    /* UG gallery */
-    .ug-gallery {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
-      max-width: 850px;
-      margin: auto;
-    }
+/* UG gallery */
+.ug-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 15px;
+  max-width: 850px;
+  margin: auto;
+}
 
-    .ug-gallery img {
-      width: 100%;
-      height: 350px;
-      object-fit: contain;
-      background: #222;
-      border-radius: 12px;
-      cursor: pointer;
-    }
+.ug-gallery img {
+  width: 100%;
+  height: 350px;
+  object-fit: contain;
+  background: #222;
+  border-radius: 12px;
+  cursor: pointer;
+}
 
-    @media (max-width: 600px) {
-      header h1 {
-        font-size: 25px;
-      }
+@media (max-width: 600px) {
+  header h1 {
+    font-size: 25px;
+  }
 
-      .page h2 {
-        font-size: 23px;
-      }
+  .page h2 {
+    font-size: 23px;
+  }
 
-      .slides img {
-        height: 380px;
-      }
-
-      .ug-gallery img {
-        height: 220px;
-      }
-    }
-  </style>
+  .ug-gallery img {
+    height: 220px;
+  }
+}
+</style>
 </head>
 
 <body>
 
-  <header>
-    <h1>Coolest's Photos</h1>
-    <hr>
-  </header>
+<header>
+  <h1>Coolest's Photos</h1>
+  <hr>
+</header>
 
-  <main class="sections">
+<main class="sections" id="sections">
 
-    <!-- Section 1: HERO X HERO -->
-    <section class="page">
-      <h2>HERO X HERO</h2>
+  <!-- HERO X HERO -->
+  <section class="page">
+    <h2>HERO X HERO</h2>
 
-      <div class="slider" id="slider">
-        <div class="slides" id="slides">
-          <img src="phoooto1.png" alt="Photo 1">
-          <img src="phoooto2.png" alt="Photo 2">
-          <img src="phoooto3.png" alt="Photo 3">
-          <img src="phoooto4.png" alt="Photo 4">
-          <img src="phoooto5.png" alt="Photo 5">
-          <img src="phoooto6.png" alt="Photo 6">
-          <img src="phoooto7.png" alt="Photo 7">
-        </div>
-
-        <button class="arrow prev"
-          onclick="move(-1)"
-          aria-label="Previous photo">&#10094;</button>
-
-        <button class="arrow next"
-          onclick="move(1)"
-          aria-label="Next photo">&#10095;</button>
+    <div class="slider" id="slider">
+      <div class="slides" id="slides">
+        <img src="phoooto1.png" alt="Photo 1">
+        <img src="phoooto2.png" alt="Photo 2">
+        <img src="phoooto3.png" alt="Photo 3">
+        <img src="phoooto4.png" alt="Photo 4">
+        <img src="phoooto5.png" alt="Photo 5">
+        <img src="phoooto6.png" alt="Photo 6">
+        <img src="phoooto7.png" alt="Photo 7">
       </div>
 
-      <div class="dots" id="dots"></div>
-      <div class="counter" id="counter">1 / 7</div>
-    </section>
+      <button class="arrow prev" id="prev"
+        aria-label="Previous photo">&#10094;</button>
 
-    <!-- Section 2: SOON -->
-    <section class="page">
-      <h2>SOON!</h2>
-      <div class="soon">SOON!</div>
-    </section>
+      <button class="arrow next" id="next"
+        aria-label="Next photo">&#10095;</button>
+    </div>
 
-    <!-- Section 3: UG -->
-    <section class="page">
-      <h2>UG</h2>
+    <div class="dots" id="dots"></div>
+    <div class="counter" id="counter">1 / 7</div>
+  </section>
 
-      <div class="ug-gallery">
-        <img src="ugphoooto1.png" alt="UG Photo 1">
-        <img src="ugphoooto2.png" alt="UG Photo 2">
-      </div>
-    </section>
+  <!-- SOON -->
+  <section class="page">
+    <h2>SOON!</h2>
+    <div class="soon">SOON!</div>
+  </section>
 
-  </main>
+  <!-- UG -->
+  <section class="page">
+    <h2>UG</h2>
 
-  <script>
-    // HERO X HERO photo slider
-    const slides = document.getElementById("slides");
-    const dots = document.getElementById("dots");
-    const counter = document.getElementById("counter");
-    const slider = document.getElementById("slider");
+    <div class="ug-gallery">
+      <img src="ugphoooto1.png" alt="UG Photo 1">
+      <img src="ugphoooto2.png" alt="UG Photo 2">
+    </div>
+  </section>
 
-    const total = 7;
-    let current = 0;
-    let startX = 0;
+</main>
 
-    // Create navigation dots
-    for (let i = 0; i < total; i++) {
-      const dot = document.createElement("button");
-      dot.className = "dot";
-      dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
-      dot.onclick = () => show(i);
-      dots.appendChild(dot);
-    }
+<script>
+/* Section scrolling */
+const sections = document.getElementById("sections");
 
-    // Show selected photo
-    function show(index) {
-      current = (index + total) % total;
+sections.addEventListener("wheel", function(e) {
+  if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+    e.preventDefault();
+    sections.scrollLeft += e.deltaY;
+  }
+}, { passive: false });
 
-      slides.style.transform =
-        `translateX(-${current * 100}%)`;
 
-      document.querySelectorAll(".dot").forEach((dot, i) => {
-        dot.classList.toggle("active", i === current);
-      });
+/* HERO X HERO photo slider */
+const slides = document.getElementById("slides");
+const slider = document.getElementById("slider");
+const dots = document.getElementById("dots");
+const counter = document.getElementById("counter");
 
-      counter.textContent = `${current + 1} / ${total}`;
-    }
+const total = 7;
+let current = 0;
+let startX = 0;
 
-    // Previous / next photo
-    function move(direction) {
-      show(current + direction);
-    }
+for (let i = 0; i < total; i++) {
+  const dot = document.createElement("button");
+  dot.className = "dot";
+  dot.setAttribute("aria-label", `Go to photo ${i + 1}`);
+  dot.addEventListener("click", () => show(i));
+  dots.appendChild(dot);
+}
 
-    // Swipe photos on touchscreen
-    slider.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    }, { passive: true });
+function show(index) {
+  current = (index + total) % total;
 
-    slider.addEventListener("touchend", e => {
-      const difference =
-        e.changedTouches[0].clientX - startX;
+  slides.style.transform =
+    `translateX(-${current * 100}%)`;
 
-      if (difference > 50) move(-1);
-      if (difference < -50) move(1);
-    }, { passive: true });
+  document.querySelectorAll(".dot").forEach((dot, i) => {
+    dot.classList.toggle("active", i === current);
+  });
 
-    // Mouse wheel scrolling between sections
-    const sections = document.querySelector(".sections");
+  counter.textContent = `${current + 1} / ${total}`;
+}
 
-    sections.addEventListener("wheel", e => {
-      if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
-        e.preventDefault();
-        sections.scrollLeft += e.deltaY;
-      }
-    }, { passive: false });
+document.getElementById("prev").addEventListener("click", () => {
+  show(current - 1);
+});
 
-    // Open photos in a new tab
-    document.querySelectorAll(".slides img, .ug-gallery img")
-      .forEach(img => {
-        img.onclick = () => window.open(img.src, "_blank");
-      });
+document.getElementById("next").addEventListener("click", () => {
+  show(current + 1);
+});
 
-    show(0);
-  </script>
+/* Swipe photos on touchscreens */
+slider.addEventListener("touchstart", e => {
+  startX = e.touches[0].clientX;
+}, { passive: true });
+
+slider.addEventListener("touchend", e => {
+  const difference = e.changedTouches[0].clientX - startX;
+
+  if (difference > 50) show(current - 1);
+  if (difference < -50) show(current + 1);
+}, { passive: true });
+
+/* Open photos in a new tab */
+document.querySelectorAll(".slides img, .ug-gallery img")
+  .forEach(img => {
+    img.addEventListener("click", () => {
+      window.open(img.src, "_blank");
+    });
+  });
+
+show(0);
+</script>
 
 </body>
 </html>
