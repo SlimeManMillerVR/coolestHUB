@@ -16,7 +16,7 @@
 
     body {
       margin: 0;
-      background: #111;
+      background: #111111;
       color: white;
       font-family: Arial, Helvetica, sans-serif;
       overflow-x: hidden;
@@ -25,6 +25,7 @@
     header {
       text-align: center;
       padding: 30px 15px 20px;
+      background: #111111;
     }
 
     header h1 {
@@ -45,6 +46,12 @@
       width: 100%;
       padding: 35px 20px 60px;
       text-align: center;
+      background: #111111;
+    }
+
+    #hero,
+    #ug {
+      background: #111111;
     }
 
     .section-title {
@@ -54,7 +61,7 @@
       letter-spacing: 2px;
     }
 
-    /* SLIDERS */
+    /* PHOTO SLIDERS */
 
     .slider {
       position: relative;
@@ -68,7 +75,7 @@
       width: 100%;
       height: min(65vh, 650px);
       object-fit: contain;
-      background: #080808;
+      background: #111111;
       border-radius: 10px;
       cursor: pointer;
     }
@@ -102,20 +109,15 @@
 
     .image-counter {
       margin-top: 14px;
-      color: #bbb;
+      color: #bbbbbb;
       font-size: 15px;
-    }
-
-    /* UG SECTION */
-
-    #ug {
-      background: #191919;
     }
 
     footer {
       padding: 25px 15px;
       text-align: center;
-      color: #777;
+      color: #777777;
+      background: #111111;
       font-size: 14px;
     }
 
@@ -201,7 +203,7 @@
   </footer>
 
   <script>
-    // HERO slider
+    // HERO X HERO slider
     const heroImages = [
       "phoooto1.png",
       "phoooto2.png",
@@ -218,8 +220,10 @@
       heroIndex = (index + heroImages.length) % heroImages.length;
 
       const file = heroImages[heroIndex];
+
       document.getElementById("heroImage").src = file;
-      document.getElementById("heroImage").alt = "Hero photo " + (heroIndex + 1);
+      document.getElementById("heroImage").alt =
+        "Hero photo " + (heroIndex + 1);
       document.getElementById("heroLink").href = file;
       document.getElementById("heroCounter").textContent =
         (heroIndex + 1) + " / " + heroImages.length;
@@ -245,8 +249,10 @@
       ugIndex = (index + ugImages.length) % ugImages.length;
 
       const file = ugImages[ugIndex];
+
       document.getElementById("ugImage").src = file;
-      document.getElementById("ugImage").alt = "UG photo " + (ugIndex + 1);
+      document.getElementById("ugImage").alt =
+        "UG photo " + (ugIndex + 1);
       document.getElementById("ugLink").href = file;
       document.getElementById("ugCounter").textContent =
         (ugIndex + 1) + " / " + ugImages.length;
@@ -260,7 +266,7 @@
       showUG(ugIndex + 1);
     });
 
-    // Touch swipe for both sliders
+    // Swipe support for both sliders
     function enableSwipe(slider, showFunction, getIndex, total) {
       let startX = 0;
       let startY = 0;
@@ -277,7 +283,6 @@
         const dx = endX - startX;
         const dy = endY - startY;
 
-        // Only change photos on a mostly horizontal swipe
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
           if (dx < 0) {
             showFunction(getIndex() + 1);
