@@ -16,7 +16,7 @@
 
     body {
       margin: 0;
-      background: #111111;
+      background: #111;
       color: white;
       font-family: Arial, Helvetica, sans-serif;
       overflow-x: hidden;
@@ -25,7 +25,7 @@
     header {
       text-align: center;
       padding: 30px 15px 20px;
-      background: #111111;
+      background: #111;
     }
 
     header h1 {
@@ -46,12 +46,7 @@
       width: 100%;
       padding: 35px 20px 60px;
       text-align: center;
-      background: #111111;
-    }
-
-    #hero,
-    #ug {
-      background: #111111;
+      background: #111;
     }
 
     .section-title {
@@ -61,7 +56,7 @@
       letter-spacing: 2px;
     }
 
-    /* PHOTO SLIDERS */
+    /* SLIDERS */
 
     .slider {
       position: relative;
@@ -75,7 +70,7 @@
       width: 100%;
       height: min(65vh, 650px);
       object-fit: contain;
-      background: #111111;
+      background: #111;
       border-radius: 10px;
       cursor: pointer;
     }
@@ -109,15 +104,15 @@
 
     .image-counter {
       margin-top: 14px;
-      color: #bbbbbb;
+      color: #bbb;
       font-size: 15px;
     }
 
     footer {
       padding: 25px 15px;
       text-align: center;
-      color: #777777;
-      background: #111111;
+      color: #777;
+      background: #111;
       font-size: 14px;
     }
 
@@ -150,8 +145,8 @@
   <section class="page-section" id="hero">
     <h2 class="section-title">HERO X HERO</h2>
 
-    <div class="slider">
-      <button class="slider-button prev" id="heroPrev" aria-label="Previous photo">
+    <div class="slider" id="heroSlider">
+      <button class="slider-button prev" id="heroPrev" aria-label="Previous HERO photo">
         &#10094;
       </button>
 
@@ -160,11 +155,11 @@
           class="slider-image"
           id="heroImage"
           src="phoooto1.png"
-          alt="Hero photo 1"
+          alt="HERO photo 1"
         >
       </a>
 
-      <button class="slider-button next" id="heroNext" aria-label="Next photo">
+      <button class="slider-button next" id="heroNext" aria-label="Next HERO photo">
         &#10095;
       </button>
     </div>
@@ -172,11 +167,11 @@
     <div class="image-counter" id="heroCounter">1 / 7</div>
   </section>
 
-  <!-- UG: 2 PHOTOS -->
+  <!-- UG: 2 PHOTOS, SLIDER -->
   <section class="page-section" id="ug">
     <h2 class="section-title">UG</h2>
 
-    <div class="slider">
+    <div class="slider" id="ugSlider">
       <button class="slider-button prev" id="ugPrev" aria-label="Previous UG photo">
         &#10094;
       </button>
@@ -223,7 +218,7 @@
 
       document.getElementById("heroImage").src = file;
       document.getElementById("heroImage").alt =
-        "Hero photo " + (heroIndex + 1);
+        "HERO photo " + (heroIndex + 1);
       document.getElementById("heroLink").href = file;
       document.getElementById("heroCounter").textContent =
         (heroIndex + 1) + " / " + heroImages.length;
@@ -267,22 +262,23 @@
     });
 
     // Swipe support for both sliders
-    function enableSwipe(slider, showFunction, getIndex, total) {
+    function enableSwipe(sliderElement, showFunction, getIndex, totalImages) {
       let startX = 0;
       let startY = 0;
 
-      slider.addEventListener("touchstart", (event) => {
+      sliderElement.addEventListener("touchstart", (event) => {
         startX = event.changedTouches[0].screenX;
         startY = event.changedTouches[0].screenY;
       }, { passive: true });
 
-      slider.addEventListener("touchend", (event) => {
+      sliderElement.addEventListener("touchend", (event) => {
         const endX = event.changedTouches[0].screenX;
         const endY = event.changedTouches[0].screenY;
 
         const dx = endX - startX;
         const dy = endY - startY;
 
+        // Change photos only for horizontal swipes
         if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
           if (dx < 0) {
             showFunction(getIndex() + 1);
@@ -294,14 +290,14 @@
     }
 
     enableSwipe(
-      document.querySelector("#hero .slider"),
+      document.getElementById("heroSlider"),
       showHero,
       () => heroIndex,
       heroImages.length
     );
 
     enableSwipe(
-      document.querySelector("#ug .slider"),
+      document.getElementById("ugSlider"),
       showUG,
       () => ugIndex,
       ugImages.length
