@@ -10,269 +10,254 @@
       box-sizing: border-box;
     }
 
-    html {
-      scroll-behavior: smooth;
-    }
-
     body {
       margin: 0;
       background: #111;
       color: white;
-      font-family: Arial, Helvetica, sans-serif;
-      overflow-x: hidden;
+      font-family: Arial, sans-serif;
+      text-align: center;
     }
 
     header {
-      text-align: center;
       padding: 30px 15px 20px;
     }
 
     header h1 {
+      display: inline-block;
       margin: 0;
-      font-size: clamp(28px, 5vw, 48px);
-      font-weight: 900;
+      font-size: 32px;
+      border-bottom: 3px solid white;
+      padding-bottom: 8px;
     }
 
-    .header-line {
-      width: 80%;
-      max-width: 700px;
-      height: 3px;
-      background: white;
-      margin: 18px auto 0;
-    }
-
-    .page-section {
+    section {
       width: 100%;
-      padding: 35px 20px 60px;
-      text-align: center;
+      max-width: 850px;
+      margin: 35px auto 55px;
+      padding: 0 15px;
     }
 
-    .section-title {
-      font-size: clamp(24px, 4vw, 38px);
-      font-weight: 900;
-      margin: 0 0 25px;
-      letter-spacing: 2px;
+    section h2 {
+      font-size: 25px;
+      margin-bottom: 20px;
     }
-
-    /* SLIDER */
 
     .slider {
       position: relative;
       width: 100%;
-      max-width: 1000px;
-      margin: 0 auto;
-      touch-action: pan-y;
-      user-select: none;
     }
 
-    .slider-image {
-      display: block;
+    .photo-frame {
       width: 100%;
-      height: min(65vh, 650px);
-      object-fit: contain;
-      background: #080808;
-      border-radius: 10px;
-      cursor: pointer;
+      height: min(70vh, 650px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #111;
+      overflow: hidden;
     }
 
-    .slider-button {
+    .photo {
+      display: block;
+      max-width: 100%;
+      max-height: 100%;
+      width: auto;
+      height: auto;
+      object-fit: contain;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+    .arrow {
       position: absolute;
       top: 50%;
       transform: translateY(-50%);
-      width: 48px;
-      height: 48px;
       border: none;
       border-radius: 50%;
-      background: rgba(0, 0, 0, 0.75);
+      width: 45px;
+      height: 45px;
+      background: rgba(0, 0, 0, 0.65);
       color: white;
-      font-size: 30px;
+      font-size: 28px;
       cursor: pointer;
       z-index: 2;
-      transition: background 0.2s, transform 0.2s;
     }
 
-    .slider-button:hover {
-      background: rgba(255, 255, 255, 0.3);
-      transform: translateY(-50%) scale(1.1);
+    .arrow:hover {
+      background: rgba(60, 60, 60, 0.9);
     }
 
-    .slider-button.prev {
-      left: 12px;
+    .prev {
+      left: 10px;
     }
 
-    .slider-button.next {
-      right: 12px;
+    .next {
+      right: 10px;
     }
 
-    .image-counter {
-      margin-top: 14px;
-      color: #bbb;
+    .photo-count {
+      margin-top: 12px;
       font-size: 15px;
+      color: #ccc;
     }
-
-    /* DOTS */
 
     .dots {
       display: flex;
       justify-content: center;
-      gap: 9px;
-      margin-top: 16px;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 15px;
     }
 
     .dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
+      width: 9px;
+      height: 9px;
       border: none;
-      padding: 0;
+      border-radius: 50%;
       background: #555;
+      padding: 0;
       cursor: pointer;
-      transition: 0.2s;
     }
 
     .dot.active {
       background: white;
-      transform: scale(1.3);
+      transform: scale(1.25);
     }
 
-    footer {
-      padding: 25px 15px;
-      text-align: center;
-      color: #777;
-      font-size: 14px;
-    }
-
-    @media (max-width: 650px) {
-      .page-section {
-        padding: 25px 12px 45px;
+    @media (max-width: 600px) {
+      header h1 {
+        font-size: 27px;
       }
 
-      .slider-image {
-        height: 50vh;
+      section h2 {
+        font-size: 22px;
       }
 
-      .slider-button {
-        width: 40px;
-        height: 40px;
-        font-size: 25px;
+      .photo-frame {
+        height: 60vh;
+      }
+
+      .arrow {
+        width: 38px;
+        height: 38px;
+        font-size: 24px;
+      }
+
+      .prev {
+        left: 5px;
+      }
+
+      .next {
+        right: 5px;
       }
     }
   </style>
 </head>
 
 <body>
-
   <header>
     <h1>Coolest's Photos</h1>
-    <div class="header-line"></div>
   </header>
 
-  <!-- HERO X HERO -->
-  <section class="page-section" id="hero">
-    <h2 class="section-title">HERO X HERO</h2>
+  <section>
+    <h2>HERO X HERO</h2>
 
-    <div class="slider" id="heroSlider">
-      <button class="slider-button prev" id="heroPrev">&#10094;</button>
+    <div class="slider" id="hero-slider">
+      <div class="photo-frame">
+        <img class="photo" id="hero-photo" src="phoooto1.png" alt="Hero photo 1">
+      </div>
 
-      <a id="heroLink" href="phoooto1.png" target="_blank" rel="noopener">
-        <img class="slider-image" id="heroImage" src="phoooto1.png" alt="Hero photo 1">
-      </a>
+      <button class="arrow prev" aria-label="Previous photo">‹</button>
+      <button class="arrow next" aria-label="Next photo">›</button>
 
-      <button class="slider-button next" id="heroNext">&#10095;</button>
+      <div class="photo-count" id="hero-count">1 / 7</div>
+      <div class="dots" id="hero-dots"></div>
     </div>
-
-    <div class="image-counter" id="heroCounter">1 / 7</div>
-    <div class="dots" id="heroDots"></div>
   </section>
 
-  <!-- UG -->
-  <section class="page-section" id="ug">
-    <h2 class="section-title">UG</h2>
+  <section>
+    <h2>UG</h2>
 
-    <div class="slider" id="ugSlider">
-      <button class="slider-button prev" id="ugPrev">&#10094;</button>
+    <div class="slider" id="ug-slider">
+      <div class="photo-frame">
+        <img class="photo" id="ug-photo" src="ugphoooto1.png" alt="UG photo 1">
+      </div>
 
-      <a id="ugLink" href="ugphoooto1.png" target="_blank" rel="noopener">
-        <img class="slider-image" id="ugImage" src="ugphoooto1.png" alt="UG photo 1">
-      </a>
+      <button class="arrow prev" aria-label="Previous photo">‹</button>
+      <button class="arrow next" aria-label="Next photo">›</button>
 
-      <button class="slider-button next" id="ugNext">&#10095;</button>
+      <div class="photo-count" id="ug-count">1 / 2</div>
+      <div class="dots" id="ug-dots"></div>
     </div>
-
-    <div class="image-counter" id="ugCounter">1 / 2</div>
-    <div class="dots" id="ugDots"></div>
   </section>
-
-  <footer>
-    Coolest's Photos
-  </footer>
 
   <script>
-    function createSlider(config) {
-      let current = 0;
-      let startX = 0;
-      let startY = 0;
+    function createSlider(sliderId, imageId, countId, dotsId, imageList) {
+      const slider = document.getElementById(sliderId);
+      const image = document.getElementById(imageId);
+      const count = document.getElementById(countId);
+      const dotsContainer = document.getElementById(dotsId);
 
-      const image = document.getElementById(config.image);
-      const link = document.getElementById(config.link);
-      const counter = document.getElementById(config.counter);
-      const dotsContainer = document.getElementById(config.dots);
-      const slider = document.getElementById(config.slider);
+      let currentIndex = 0;
+      let touchStartX = 0;
 
-      function update() {
-        const file = config.images[current];
+      // Her slider kendi imageList ve currentIndex değerini kullanır.
+      function showPhoto(index) {
+        currentIndex = (index + imageList.length) % imageList.length;
 
-        image.src = file;
-        image.alt = config.name + " photo " + (current + 1);
-        link.href = file;
-        counter.textContent = (current + 1) + " / " + config.images.length;
+        // Fotoğraf kaynağını doğrudan seçilen dosyadan güncelle.
+        image.src = imageList[currentIndex];
+        image.alt = `Photo ${currentIndex + 1}`;
 
-        [...dotsContainer.children].forEach((dot, index) => {
-          dot.classList.toggle("active", index === current);
+        count.textContent = `${currentIndex + 1} / ${imageList.length}`;
+
+        const dots = dotsContainer.querySelectorAll(".dot");
+        dots.forEach((dot, i) => {
+          dot.classList.toggle("active", i === currentIndex);
         });
       }
 
-      function goTo(index) {
-        current = (index + config.images.length) % config.images.length;
-        update();
-      }
-
-      config.images.forEach((_, index) => {
+      // Her fotoğraf için kendi noktasını oluştur.
+      imageList.forEach((_, index) => {
         const dot = document.createElement("button");
         dot.className = "dot";
-        dot.setAttribute("aria-label", "Go to photo " + (index + 1));
-        dot.addEventListener("click", () => goTo(index));
+        dot.setAttribute("aria-label", `Go to photo ${index + 1}`);
+        dot.addEventListener("click", () => showPhoto(index));
         dotsContainer.appendChild(dot);
       });
 
-      document.getElementById(config.prev).addEventListener("click", () => {
-        goTo(current - 1);
+      slider.querySelector(".prev").addEventListener("click", () => {
+        showPhoto(currentIndex - 1);
       });
 
-      document.getElementById(config.next).addEventListener("click", () => {
-        goTo(current + 1);
+      slider.querySelector(".next").addEventListener("click", () => {
+        showPhoto(currentIndex + 1);
       });
 
-      slider.addEventListener("touchstart", (event) => {
-        startX = event.changedTouches[0].screenX;
-        startY = event.changedTouches[0].screenY;
+      // Telefonda sağa-sola kaydırma.
+      slider.addEventListener("touchstart", event => {
+        touchStartX = event.changedTouches[0].screenX;
       }, { passive: true });
 
-      slider.addEventListener("touchend", (event) => {
-        const dx = event.changedTouches[0].screenX - startX;
-        const dy = event.changedTouches[0].screenY - startY;
+      slider.addEventListener("touchend", event => {
+        const touchEndX = event.changedTouches[0].screenX;
+        const difference = touchEndX - touchStartX;
 
-        if (Math.abs(dx) > 45 && Math.abs(dx) > Math.abs(dy)) {
-          goTo(current + (dx < 0 ? 1 : -1));
+        if (Math.abs(difference) > 45) {
+          showPhoto(difference < 0 ? currentIndex + 1 : currentIndex - 1);
         }
       }, { passive: true });
 
-      update();
+      showPhoto(0);
     }
 
-    createSlider({
-      name: "HERO",
-      images: [
+    // HERO slider: 7 ayrı dosya
+    createSlider(
+      "hero-slider",
+      "hero-photo",
+      "hero-count",
+      "hero-dots",
+      [
         "phoooto1.png",
         "phoooto2.png",
         "phoooto3.png",
@@ -280,31 +265,20 @@
         "phoooto5.png",
         "phoooto6.png",
         "phoooto7.png"
-      ],
-      slider: "heroSlider",
-      image: "heroImage",
-      link: "heroLink",
-      counter: "heroCounter",
-      dots: "heroDots",
-      prev: "heroPrev",
-      next: "heroNext"
-    });
+      ]
+    );
 
-    createSlider({
-      name: "UG",
-      images: [
+    // UG slider: 2 ayrı dosya
+    createSlider(
+      "ug-slider",
+      "ug-photo",
+      "ug-count",
+      "ug-dots",
+      [
         "ugphoooto1.png",
         "ugphoooto2.png"
-      ],
-      slider: "ugSlider",
-      image: "ugImage",
-      link: "ugLink",
-      counter: "ugCounter",
-      dots: "ugDots",
-      prev: "ugPrev",
-      next: "ugNext"
-    });
+      ]
+    );
   </script>
-
 </body>
 </html>
