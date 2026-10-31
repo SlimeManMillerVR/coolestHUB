@@ -54,16 +54,16 @@
       letter-spacing: 2px;
     }
 
-    /* HERO X HERO SLIDER */
+    /* SLIDERS */
 
-    .hero-slider {
+    .slider {
       position: relative;
       width: 100%;
       max-width: 1000px;
       margin: 0 auto;
     }
 
-    .hero-image {
+    .slider-image {
       display: block;
       width: 100%;
       height: min(65vh, 650px);
@@ -106,51 +106,10 @@
       font-size: 15px;
     }
 
-    /* SOON SECTION */
+    /* UG SECTION */
 
-    .soon-section {
-      min-height: 250px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    #ug {
       background: #191919;
-    }
-
-    .soon-section .section-title {
-      font-size: clamp(40px, 8vw, 75px);
-      margin: 0;
-    }
-
-    /* UG GALLERY */
-
-    .ug-gallery {
-      width: 100%;
-      max-width: 1100px;
-      margin: 0 auto;
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 20px;
-    }
-
-    .ug-gallery a {
-      display: block;
-      background: #080808;
-      border-radius: 10px;
-      overflow: hidden;
-    }
-
-    .ug-gallery img {
-      display: block;
-      width: 100%;
-      height: 350px;
-      object-fit: contain;
-      cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    .ug-gallery img:hover {
-      transform: scale(1.03);
     }
 
     footer {
@@ -165,7 +124,7 @@
         padding: 25px 12px 45px;
       }
 
-      .hero-image {
+      .slider-image {
         height: 50vh;
       }
 
@@ -173,15 +132,6 @@
         width: 40px;
         height: 40px;
         font-size: 25px;
-      }
-
-      .ug-gallery {
-        grid-template-columns: 1fr;
-        gap: 15px;
-      }
-
-      .ug-gallery img {
-        height: 300px;
       }
     }
   </style>
@@ -194,47 +144,56 @@
     <div class="header-line"></div>
   </header>
 
-  <!-- HERO X HERO -->
+  <!-- HERO X HERO: 7 PHOTOS -->
   <section class="page-section" id="hero">
     <h2 class="section-title">HERO X HERO</h2>
 
-    <div class="hero-slider">
-      <button class="slider-button prev" id="prevButton" aria-label="Previous image">
+    <div class="slider">
+      <button class="slider-button prev" id="heroPrev" aria-label="Previous photo">
         &#10094;
       </button>
 
-      <a id="heroImageLink" href="phoooto1.png" target="_blank" rel="noopener">
+      <a id="heroLink" href="phoooto1.png" target="_blank" rel="noopener">
         <img
-          class="hero-image"
+          class="slider-image"
           id="heroImage"
           src="phoooto1.png"
           alt="Hero photo 1"
         >
       </a>
 
-      <button class="slider-button next" id="nextButton" aria-label="Next image">
+      <button class="slider-button next" id="heroNext" aria-label="Next photo">
         &#10095;
       </button>
     </div>
 
-    <div class="image-counter" id="imageCounter">1 / 7</div>
+    <div class="image-counter" id="heroCounter">1 / 7</div>
   </section>
 
-  <!-- SOON -->
-
-  <!-- UG -->
+  <!-- UG: 2 PHOTOS -->
   <section class="page-section" id="ug">
     <h2 class="section-title">UG</h2>
 
-    <div class="ug-gallery">
-      <a href="ugphoooto1.png" target="_blank" rel="noopener">
-        <img src="ugphoooto1.png" alt="UG photo 1">
+    <div class="slider">
+      <button class="slider-button prev" id="ugPrev" aria-label="Previous UG photo">
+        &#10094;
+      </button>
+
+      <a id="ugLink" href="ugphoooto1.png" target="_blank" rel="noopener">
+        <img
+          class="slider-image"
+          id="ugImage"
+          src="ugphoooto1.png"
+          alt="UG photo 1"
+        >
       </a>
 
-      <a href="ugphoooto2.png" target="_blank" rel="noopener">
-        <img src="ugphoooto2.png" alt="UG photo 2">
-      </a>
+      <button class="slider-button next" id="ugNext" aria-label="Next UG photo">
+        &#10095;
+      </button>
     </div>
+
+    <div class="image-counter" id="ugCounter">1 / 2</div>
   </section>
 
   <footer>
@@ -242,6 +201,7 @@
   </footer>
 
   <script>
+    // HERO slider
     const heroImages = [
       "phoooto1.png",
       "phoooto2.png",
@@ -252,59 +212,95 @@
       "phoooto7.png"
     ];
 
-    let currentImage = 0;
+    let heroIndex = 0;
 
-    const heroImage = document.getElementById("heroImage");
-    const heroImageLink = document.getElementById("heroImageLink");
-    const imageCounter = document.getElementById("imageCounter");
+    function showHero(index) {
+      heroIndex = (index + heroImages.length) % heroImages.length;
 
-    function showImage(index) {
-      currentImage = (index + heroImages.length) % heroImages.length;
-
-      const imageName = heroImages[currentImage];
-
-      heroImage.src = imageName;
-      heroImage.alt = "Hero photo " + (currentImage + 1);
-      heroImageLink.href = imageName;
-      imageCounter.textContent =
-        (currentImage + 1) + " / " + heroImages.length;
+      const file = heroImages[heroIndex];
+      document.getElementById("heroImage").src = file;
+      document.getElementById("heroImage").alt = "Hero photo " + (heroIndex + 1);
+      document.getElementById("heroLink").href = file;
+      document.getElementById("heroCounter").textContent =
+        (heroIndex + 1) + " / " + heroImages.length;
     }
 
-    document.getElementById("prevButton").addEventListener("click", () => {
-      showImage(currentImage - 1);
+    document.getElementById("heroPrev").addEventListener("click", () => {
+      showHero(heroIndex - 1);
     });
 
-    document.getElementById("nextButton").addEventListener("click", () => {
-      showImage(currentImage + 1);
+    document.getElementById("heroNext").addEventListener("click", () => {
+      showHero(heroIndex + 1);
     });
 
-    // Swipe left or right to change HERO photos
-    let touchStartX = 0;
-    let touchStartY = 0;
+    // UG slider
+    const ugImages = [
+      "ugphoooto1.png",
+      "ugphoooto2.png"
+    ];
 
-    const slider = document.querySelector(".hero-slider");
+    let ugIndex = 0;
 
-    slider.addEventListener("touchstart", (event) => {
-      touchStartX = event.changedTouches[0].screenX;
-      touchStartY = event.changedTouches[0].screenY;
-    }, { passive: true });
+    function showUG(index) {
+      ugIndex = (index + ugImages.length) % ugImages.length;
 
-    slider.addEventListener("touchend", (event) => {
-      const touchEndX = event.changedTouches[0].screenX;
-      const touchEndY = event.changedTouches[0].screenY;
+      const file = ugImages[ugIndex];
+      document.getElementById("ugImage").src = file;
+      document.getElementById("ugImage").alt = "UG photo " + (ugIndex + 1);
+      document.getElementById("ugLink").href = file;
+      document.getElementById("ugCounter").textContent =
+        (ugIndex + 1) + " / " + ugImages.length;
+    }
 
-      const differenceX = touchEndX - touchStartX;
-      const differenceY = touchEndY - touchStartY;
+    document.getElementById("ugPrev").addEventListener("click", () => {
+      showUG(ugIndex - 1);
+    });
 
-      // Only change photos when the gesture is mainly horizontal
-      if (Math.abs(differenceX) > 50 && Math.abs(differenceX) > Math.abs(differenceY)) {
-        if (differenceX < 0) {
-          showImage(currentImage + 1);
-        } else {
-          showImage(currentImage - 1);
+    document.getElementById("ugNext").addEventListener("click", () => {
+      showUG(ugIndex + 1);
+    });
+
+    // Touch swipe for both sliders
+    function enableSwipe(slider, showFunction, getIndex, total) {
+      let startX = 0;
+      let startY = 0;
+
+      slider.addEventListener("touchstart", (event) => {
+        startX = event.changedTouches[0].screenX;
+        startY = event.changedTouches[0].screenY;
+      }, { passive: true });
+
+      slider.addEventListener("touchend", (event) => {
+        const endX = event.changedTouches[0].screenX;
+        const endY = event.changedTouches[0].screenY;
+
+        const dx = endX - startX;
+        const dy = endY - startY;
+
+        // Only change photos on a mostly horizontal swipe
+        if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
+          if (dx < 0) {
+            showFunction(getIndex() + 1);
+          } else {
+            showFunction(getIndex() - 1);
+          }
         }
-      }
-    }, { passive: true });
+      }, { passive: true });
+    }
+
+    enableSwipe(
+      document.querySelector("#hero .slider"),
+      showHero,
+      () => heroIndex,
+      heroImages.length
+    );
+
+    enableSwipe(
+      document.querySelector("#ug .slider"),
+      showUG,
+      () => ugIndex,
+      ugImages.length
+    );
   </script>
 
 </body>
