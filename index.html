@@ -11,6 +11,10 @@
       box-sizing: border-box;
     }
 
+    html {
+      scroll-behavior: smooth;
+    }
+
     body {
       margin: 0;
       background: #111;
@@ -37,7 +41,7 @@
       margin: 20px auto 0;
     }
 
-    /* Main horizontal sections */
+    /* Horizontal page scrolling */
     .sections {
       display: flex;
       overflow-x: auto;
@@ -64,7 +68,7 @@
       margin: 10px 0 25px;
     }
 
-    /* Photo slider */
+    /* HERO X HERO photo slider */
     .slider {
       position: relative;
       max-width: 850px;
@@ -139,6 +143,7 @@
       margin-top: 15px;
     }
 
+    /* SOON section */
     .soon {
       display: flex;
       align-items: center;
@@ -149,17 +154,39 @@
       letter-spacing: 3px;
     }
 
-    @media (max-width: 600px) {
-      .slides img {
-        height: 380px;
-      }
+    /* UG photo gallery */
+    .ug-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      max-width: 850px;
+      margin: auto;
+    }
 
+    .ug-gallery img {
+      width: 100%;
+      height: 350px;
+      object-fit: contain;
+      background: #222;
+      border-radius: 12px;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
       header h1 {
         font-size: 25px;
       }
 
       .page h2 {
         font-size: 23px;
+      }
+
+      .slides img {
+        height: 380px;
+      }
+
+      .ug-gallery img {
+        height: 220px;
       }
     }
   </style>
@@ -174,7 +201,7 @@
 
   <main class="sections">
 
-    <!-- First section -->
+    <!-- First section: HERO X HERO -->
     <section class="page">
       <h2>HERO X HERO</h2>
 
@@ -189,18 +216,33 @@
           <img src="phoooto7.png" alt="Photo 7">
         </div>
 
-        <button class="arrow prev" onclick="move(-1)">&#10094;</button>
-        <button class="arrow next" onclick="move(1)">&#10095;</button>
+        <button class="arrow prev"
+          onclick="move(-1)"
+          aria-label="Previous photo">&#10094;</button>
+
+        <button class="arrow next"
+          onclick="move(1)"
+          aria-label="Next photo">&#10095;</button>
       </div>
 
       <div class="dots" id="dots"></div>
       <div class="counter" id="counter">1 / 7</div>
     </section>
 
-    <!-- Second section -->
+    <!-- Second section: SOON -->
     <section class="page">
       <h2>SOON!</h2>
       <div class="soon">SOON!</div>
+    </section>
+
+    <!-- Third section: UG -->
+    <section class="page">
+      <h2>UG</h2>
+
+      <div class="ug-gallery">
+        <img src="ugphoooto1.png" alt="UG Photo 1">
+        <img src="ugphoooto2.png" alt="UG Photo 2">
+      </div>
     </section>
 
   </main>
@@ -215,6 +257,7 @@
     let current = 0;
     let startX = 0;
 
+    // Create photo navigation dots
     for (let i = 0; i < total; i++) {
       const dot = document.createElement("button");
       dot.className = "dot";
@@ -223,6 +266,7 @@
       dots.appendChild(dot);
     }
 
+    // Show selected photo
     function show(index) {
       current = (index + total) % total;
 
@@ -236,24 +280,29 @@
       counter.textContent = `${current + 1} / ${total}`;
     }
 
+    // Previous / next photo
     function move(direction) {
       show(current + direction);
     }
 
+    // Swipe photos on touchscreens
     slider.addEventListener("touchstart", e => {
       startX = e.touches[0].clientX;
     });
 
     slider.addEventListener("touchend", e => {
-      const difference = e.changedTouches[0].clientX - startX;
+      const difference =
+        e.changedTouches[0].clientX - startX;
 
       if (difference > 50) move(-1);
       if (difference < -50) move(1);
     });
 
-    document.querySelectorAll(".slides img").forEach(img => {
-      img.onclick = () => window.open(img.src, "_blank");
-    });
+    // Open photos in a new tab when clicked
+    document.querySelectorAll(".slides img, .ug-gallery img")
+      .forEach(img => {
+        img.onclick = () => window.open(img.src, "_blank");
+      });
 
     show(0);
   </script>
