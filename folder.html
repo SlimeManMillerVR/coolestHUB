@@ -1,1 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Folders - Coolest's Photos</title>
 
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #c7c7c7;
+      color: #111;
+      font-family: Arial, Helvetica, sans-serif;
+      overflow-x: hidden;
+    }
+
+    /* TOP BAR */
+    .topbar {
+      height: 54px;
+      background: #333;
+      color: white;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      gap: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+    }
+
+    .topbar-title {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+
+    .topbar-subtitle {
+      color: #bbb;
+      font-size: 13px;
+    }
+
+    /* DESKTOP AREA */
+    .desktop {
+      min-height: calc(100vh - 54px);
+      padding: 45px 35px;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 70px;
+      flex-wrap: wrap;
+    }
+
+    .folder-item {
+      width: 230px;
+      padding: 20px 15px;
+      border: 2px solid transparent;
+      border-radius: 8px;
+      background: transparent;
+      color: #111;
+      cursor: pointer;
+      text-align: center;
+      transition: background 0.15s, border 0.15s, transform 0.15s;
+    }
+
+    .folder-item:hover {
+      background: rgba(255, 255, 255, 0.35);
+      border-color: rgba(255, 255, 255, 0.7);
+      transform: translateY(-3px);
+    }
+
+    .folder-icon {
+      font-size: 100px;
+      line-height: 1.1;
+      filter: drop-shadow(2px 4px 2px rgba(0, 0, 0, 0.18));
+      margin-bottom: 15px;
+    }
+
+    .folder-name {
+      display: inline-block;
+      padding: 8px 12px;
+      background: rgba(255, 255, 255, 0.75);
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: 1px;
+      overflow-wrap: anywhere;
+    }
+
+    /* MODAL BACKGROUND */
+    .window-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.42);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 10;
+    }
+
+    .window-overlay.show {
+      display: flex;
+    }
+
+    /* CENTERED COMPUTER WINDOW */
+    .window {
+      width: min(850px, 95vw);
+      height: min(600px, 85vh);
+      background: #e5e5e5;
+      border: 2px solid #333;
+      box-shadow: 0 15px 45px rgba(0, 0, 0, 0.45);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      animation: windowOpen 0.18s ease-out;
+    }
+
+    @keyframes windowOpen {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .window-titlebar {
+      min-height: 48px;
+      background: #3b3b3b;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-left: 16px;
+      gap: 12px;
+    }
+
+    .window-title {
+      font-size: 16px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .close-button {
+      align-self: stretch;
+      width: 58px;
+      flex-shrink: 0;
+      border: none;
+      background: #ed1c24;
+      color: black;
+      font-size: 34px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .close-button:hover {
+      background: #ff454b;
+    }
+
+    .window-toolbar {
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 15px;
+      background: #d1d1d1;
+      border-bottom: 1px solid #aaa;
+      font-size: 13px;
+      color: #444;
+    }
+
+    .window-content {
+      flex: 1;
+      overflow: auto;
+      padding: 20px;
+      background: #f0f0f0;
+    }
+
+    /* FILES INSIDE WINDOW */
+    .file-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: 18px;
+    }
+
+    .file-item {
+      min-width: 0;
+      padding: 12px 8px;
+      border: 1px solid transparent;
+      background: transparent;
+      color: #222;
+      cursor: pointer;
+      text-align: center;
+      border-radius: 5px;
+    }
+
+    .file-item:hover {
+      background: #dcecff;
+      border-color: #8ab9ef;
+    }
+
+    .file-preview {
+      height: 105px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 8px;
+      overflow: hidden;
+      background: #ddd;
+      border: 1px solid #bbb;
+    }
+
+    .file-preview img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .file-icon {
+      font-size: 55px;
+    }
+
+    .file-name {
+      font-size: 13px;
+      overflow-wrap: anywhere;
+    }
+
+    .empty-message {
+      color: #555;
+      font-size: 15px;
+      text-align: center;
+      padding: 50px 15px;
+    }
+
+    .window-status {
+      min-height: 28px;
+      display: flex;
+      align-items: center;
+      padding: 0 12px;
+      background: #ddd;
+      border-top: 1px solid #bbb;
+      color: #555;
+      font-size: 12px;
+    }
+
+    /* PHOTO VIEWER */
+    .photo-viewer {
+      position: fixed;
+      inset: 0;
+      z-index: 20;
+      background: rgba(0, 0, 0, 0.88);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .photo-viewer.show {
+      display: flex;
+    }
+
+    .photo-viewer img {
+      max-width: 90vw;
+      max-height: 85vh;
+      object-fit: contain;
+    }
+
+    .photo-viewer-close {
+      position: absolute;
+      top: 20px;
+      right: 25px;
+      width: 50px;
+      height: 50px;
+      border: none;
+      background: #ed1c24;
+      color: black;
+      font-size: 32px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    @media (max-width: 600px) {
+      .desktop {
+        padding: 30px 10px;
+        gap: 20px;
+      }
+
+      .folder-item {
+        width: 180px;
+      }
+
+      .folder-icon {
+        font-size: 80px;
+      }
+
+      .folder-name {
+        font-size: 13px;
+      }
+
+      .window-overlay {
+        padding: 8px;
+      }
+
+      .window {
+        width: 100%;
+        height: 88vh;
+      }
+
+      .window-content {
+        padding: 12px;
+      }
+
+      .file-grid {
+        grid-template-columns: repeat(auto-fill, minmax(95px, 1fr));
+        gap: 8px;
+      }
+
+      .file-preview {
+        height: 85px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="topbar">
+    <div class="topbar-title">COOLEST'S COMPUTER</div>
+    <div class="topbar-subtitle">/ Desktop / Folders</div>
+  </div>
+
+  <main class="desktop">
+
+    <button class="folder-item" onclick="openFolder('photos')">
+      <div class="folder-icon">📁</div>
+      <div class="folder-name">COOLEST'S PHOTOS</div>
+    </button>
+
+    <button class="folder-item" onclick="openFolder('archives')">
+      <div class="folder-icon">📁</div>
+      <div class="folder-name">ARCHIVES</div>
+    </button>
+
+  </main>
+
+  <!-- CENTERED FOLDER WINDOW -->
+  <div class="window-overlay" id="windowOverlay" onclick="overlayClose(event)">
+    <div class="window" role="dialog" aria-modal="true">
+      <div class="window-titlebar">
+        <div class="window-title" id="windowTitle">FOLDER</div>
+        <button class="close-button" onclick="closeFolder()" aria-label="Close">×</button>
+      </div>
+
+      <div class="window-toolbar">
+        <span>🖥️</span>
+        <span>Desktop</span>
+        <span>›</span>
+        <span id="toolbarFolderName">Folder</span>
+      </div>
+
+      <div class="window-content" id="windowContent"></div>
+
+      <div class="window-status" id="windowStatus">Folder</div>
+    </div>
+  </div>
+
+  <!-- PHOTO POPUP -->
+  <div class="photo-viewer" id="photoViewer" onclick="closePhotoViewer(event)">
+    <button class="photo-viewer-close" onclick="closePhotoViewer()">×</button>
+    <img id="viewerImage" src="" alt="Selected photo">
+  </div>
+
+  <script>
+    const heroPhotos = [
+      "phoooto1.png",
+      "phoooto2.png",
+      "phoooto3.png",
+      "phoooto4.png",
+      "phoooto5.png",
+      "phoooto6.png",
+      "phoooto7.png"
+    ];
+
+    const ugPhotos = [
+      "ugphoooto1.png",
+      "ugphoooto2.png"
+    ];
+
+    function openFolder(folder) {
+      const overlay = document.getElementById("windowOverlay");
+      const title = document.getElementById("windowTitle");
+      const toolbarName = document.getElementById("toolbarFolderName");
+      const content = document.getElementById("windowContent");
+      const status = document.getElementById("windowStatus");
+
+      overlay.classList.add("show");
+
+      if (folder === "photos") {
+        title.textContent = "COOLEST'S PHOTOS";
+        toolbarName.textContent = "COOLEST'S PHOTOS";
+
+        let html = '<div class="file-grid">';
+
+        heroPhotos.forEach((file, index) => {
+          html += `
+            <button class="file-item" onclick="openPhoto('${file}')">
+              <div class="file-preview">
+                <img src="${file}" alt="Photo ${index + 1}">
+              </div>
+              <div class="file-name">${file}</div>
+            </button>
+          `;
+        });
+
+        ugPhotos.forEach((file, index) => {
+          html += `
+            <button class="file-item" onclick="openPhoto('${file}')">
+              <div class="file-preview">
+                <img src="${file}" alt="UG Photo ${index + 1}">
+              </div>
+              <div class="file-name">${file}</div>
+            </button>
+          `;
+        });
+
+        html += "</div>";
+        content.innerHTML = html;
+        status.textContent = "9 items";
+      } else {
+        title.textContent = "ARCHIVES";
+        toolbarName.textContent = "ARCHIVES";
+
+        content.innerHTML = `
+          <div class="file-grid">
+            <div class="file-item">
+              <div class="file-preview">
+                <div class="file-icon">🗃️</div>
+              </div>
+              <div class="file-name">Archived files</div>
+            </div>
+            <div class="file-item">
+              <div class="file-preview">
+                <div class="file-icon">📦</div>
+              </div>
+              <div class="file-name">Old folders</div>
+            </div>
+          </div>
+          <div class="empty-message">
+            This folder is ready for your archived photos.
+          </div>
+        `;
+
+        status.textContent = "2 items";
+      }
+    }
+
+    function closeFolder() {
+      document.getElementById("windowOverlay").classList.remove("show");
+    }
+
+    function overlayClose(event) {
+      if (event.target.id === "windowOverlay") {
+        closeFolder();
+      }
+    }
+
+    function openPhoto(file) {
+      const viewer = document.getElementById("photoViewer");
+      const image = document.getElementById("viewerImage");
+
+      image.src = file;
+      viewer.classList.add("show");
+    }
+
+    function closePhotoViewer(event) {
+      if (!event || event.target.id === "photoViewer") {
+        document.getElementById("photoViewer").classList.remove("show");
+      }
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") {
+        closePhotoViewer();
+        closeFolder();
+      }
+    });
+  </script>
+
+</body>
+</html>
