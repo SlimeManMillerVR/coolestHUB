@@ -89,7 +89,7 @@
       overflow-wrap: anywhere;
     }
 
-    /* MODAL BACKGROUND */
+    /* WINDOW BACKGROUND */
     .window-overlay {
       position: fixed;
       inset: 0;
@@ -123,6 +123,7 @@
         opacity: 0;
         transform: scale(0.94);
       }
+
       to {
         opacity: 1;
         transform: scale(1);
@@ -176,6 +177,8 @@
       border-bottom: 1px solid #aaa;
       font-size: 13px;
       color: #444;
+      overflow-x: auto;
+      white-space: nowrap;
     }
 
     .window-content {
@@ -185,7 +188,7 @@
       background: #f0f0f0;
     }
 
-    /* FILES INSIDE WINDOW */
+    /* FILES */
     .file-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
@@ -232,13 +235,6 @@
     .file-name {
       font-size: 13px;
       overflow-wrap: anywhere;
-    }
-
-    .empty-message {
-      color: #555;
-      font-size: 15px;
-      text-align: center;
-      padding: 50px 15px;
     }
 
     .window-status {
@@ -327,6 +323,12 @@
       .file-preview {
         height: 85px;
       }
+
+      .window-toolbar {
+        gap: 6px;
+        padding: 0 9px;
+        font-size: 12px;
+      }
     }
   </style>
 </head>
@@ -338,6 +340,7 @@
     <div class="topbar-subtitle">/ Desktop / Folders</div>
   </div>
 
+  <!-- DESKTOP FOLDERS -->
   <main class="desktop">
 
     <button class="folder-item" onclick="openFolder('photos')">
@@ -352,19 +355,19 @@
 
   </main>
 
-  <!-- CENTERED FOLDER WINDOW -->
+  <!-- FOLDER WINDOW -->
   <div class="window-overlay" id="windowOverlay" onclick="overlayClose(event)">
     <div class="window" role="dialog" aria-modal="true">
+
       <div class="window-titlebar">
         <div class="window-title" id="windowTitle">FOLDER</div>
         <button class="close-button" onclick="closeFolder()" aria-label="Close">×</button>
       </div>
 
-      <div class="window-toolbar">
-        <span>🖥️</span>
+      <div class="window-toolbar" id="windowPath">
         <span>Desktop</span>
         <span>›</span>
-        <span id="toolbarFolderName">Folder</span>
+        <span>Folders</span>
       </div>
 
       <div class="window-content" id="windowContent"></div>
@@ -373,9 +376,9 @@
     </div>
   </div>
 
-  <!-- PHOTO POPUP -->
+  <!-- PHOTO VIEWER -->
   <div class="photo-viewer" id="photoViewer" onclick="closePhotoViewer(event)">
-    <button class="photo-viewer-close" onclick="closePhotoViewer()">×</button>
+    <button class="photo-viewer-close" onclick="closePhotoViewer()" aria-label="Close photo">×</button>
     <img id="viewerImage" src="" alt="Selected photo">
   </div>
 
@@ -395,10 +398,26 @@
       "ugphoooto2.png"
     ];
 
+    function setPath(parts) {
+      const path = document.getElementById("windowPath");
+      path.innerHTML = "";
+
+      parts.forEach((part, index) => {
+        if (index > 0) {
+          const separator = document.createElement("span");
+          separator.textContent = "›";
+          path.appendChild(separator);
+        }
+
+        const item = document.createElement("span");
+        item.textContent = part;
+        path.appendChild(item);
+      });
+    }
+
     function openFolder(folder) {
       const overlay = document.getElementById("windowOverlay");
       const title = document.getElementById("windowTitle");
-      const toolbarName = document.getElementById("toolbarFolderName");
       const content = document.getElementById("windowContent");
       const status = document.getElementById("windowStatus");
 
@@ -406,7 +425,7 @@
 
       if (folder === "photos") {
         title.textContent = "COOLEST'S PHOTOS";
-        toolbarName.textContent = "COOLEST'S PHOTOS";
+        setPath(["Desktop", "COOLEST'S PHOTOS"]);
 
         let html = '<div class="file-grid">';
 
@@ -414,7 +433,7 @@
           html += `
             <button class="file-item" onclick="openPhoto('${file}')">
               <div class="file-preview">
-                <img src="${file}" alt="Photo ${index + 1}">
+                <img src="${file}" alt="Hero photo ${index + 1}">
               </div>
               <div class="file-name">${file}</div>
             </button>
@@ -425,7 +444,7 @@
           html += `
             <button class="file-item" onclick="openPhoto('${file}')">
               <div class="file-preview">
-                <img src="${file}" alt="UG Photo ${index + 1}">
+                <img src="${file}" alt="UG photo ${index + 1}">
               </div>
               <div class="file-name">${file}</div>
             </button>
@@ -435,18 +454,20 @@
         html += "</div>";
         content.innerHTML = html;
         status.textContent = "9 items";
-      } else {
+
+      } else if (folder === "archives") {
         title.textContent = "ARCHIVES";
-        toolbarName.textContent = "ARCHIVES";
+        setPath(["Desktop", "ARCHIVES"]);
 
         content.innerHTML = `
           <div class="file-grid">
-            <div class="file-item">
+            <button class="file-item" onclick="openArchivedFiles()">
               <div class="file-preview">
-                <div class="file-icon">🗃️</div>
+                <div class="file-icon">📁</div>
               </div>
               <div class="file-name">Archived files</div>
-            </div>
+            </button>
+
             <div class="file-item">
               <div class="file-preview">
                 <div class="file-icon">📦</div>
@@ -454,13 +475,32 @@
               <div class="file-name">Old folders</div>
             </div>
           </div>
-          <div class="empty-message">
-            This folder is ready for your archived photos.
-          </div>
         `;
 
         status.textContent = "2 items";
       }
+    }
+
+    function openArchivedFiles() {
+      const title = document.getElementById("windowTitle");
+      const content = document.getElementById("windowContent");
+      const status = document.getElementById("windowStatus");
+
+      title.textContent = "Archived files";
+      setPath(["Desktop", "ARCHIVES", "Archived files"]);
+
+      content.innerHTML = `
+        <div class="file-grid">
+          <button class="file-item" onclick="openPhoto('archivedphoto1.png')">
+            <div class="file-preview">
+              <img src="archivedphoto1.png" alt="Archived photo 1">
+            </div>
+            <div class="file-name">archivedphoto1.png</div>
+          </button>
+        </div>
+      `;
+
+      status.textContent = "1 item";
     }
 
     function closeFolder() {
