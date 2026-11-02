@@ -33,6 +33,28 @@
       font-weight: 900;
     }
 
+    .folders-button-container {
+      margin-top: 15px;
+    }
+
+    .folders-button {
+      display: inline-block;
+      padding: 10px 24px;
+      background: white;
+      color: #111;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      border-radius: 6px;
+      transition: background 0.2s, transform 0.2s;
+    }
+
+    .folders-button:hover {
+      background: #ddd;
+      transform: scale(1.05);
+    }
+
     .header-line {
       width: 80%;
       max-width: 700px;
@@ -164,6 +186,11 @@
 
   <header>
     <h1>Coolest's Photos</h1>
+
+    <div class="folders-button-container">
+      <a class="folders-button" href="folder.html">FOLDERS</a>
+    </div>
+
     <div class="header-line"></div>
   </header>
 
@@ -219,21 +246,20 @@
       const dotsContainer = document.getElementById(config.dots);
       const slider = document.getElementById(config.slider);
 
-     function update() {
-  const file = config.images[current];
+      function update() {
+        const file = config.images[current];
 
-  // 
-  image.src = "";
-  image.src = file + "?slide=" + current;
+        image.src = "";
+        image.src = file + "?slide=" + current;
 
-  image.alt = config.name + " photo " + (current + 1);
-  link.href = file;
-  counter.textContent = (current + 1) + " / " + config.images.length;
+        image.alt = config.name + " photo " + (current + 1);
+        link.href = file;
+        counter.textContent = (current + 1) + " / " + config.images.length;
 
-  [...dotsContainer.children].forEach((dot, index) => {
-    dot.classList.toggle("active", index === current);
-  });
-}
+        [...dotsContainer.children].forEach((dot, index) => {
+          dot.classList.toggle("active", index === current);
+        });
+      }
 
       function goTo(index) {
         current = (index + config.images.length) % config.images.length;
