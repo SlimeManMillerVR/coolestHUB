@@ -42,7 +42,7 @@
       font-size: 13px;
     }
 
-    /* DESKTOP AREA */
+    /* DESKTOP */
     .desktop {
       min-height: calc(100vh - 54px);
       padding: 45px 35px;
@@ -89,7 +89,7 @@
       overflow-wrap: anywhere;
     }
 
-    /* WINDOW BACKGROUND */
+    /* WINDOW OVERLAY */
     .window-overlay {
       position: fixed;
       inset: 0;
@@ -105,7 +105,7 @@
       display: flex;
     }
 
-    /* CENTERED COMPUTER WINDOW */
+    /* COMPUTER WINDOW */
     .window {
       width: min(850px, 95vw);
       height: min(600px, 85vh);
@@ -188,7 +188,7 @@
       background: #f0f0f0;
     }
 
-    /* FILES */
+    /* FILE GRID */
     .file-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
@@ -246,6 +246,49 @@
       border-top: 1px solid #bbb;
       color: #555;
       font-size: 12px;
+    }
+
+    /* PASSCODE INPUT */
+    .passcode-box {
+      max-width: 350px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    .passcode-box h2 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+
+    .passcode-input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #888;
+      background: white;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+    }
+
+    .passcode-submit {
+      margin-top: 12px;
+      padding: 10px 25px;
+      border: none;
+      background: #333;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .invalid-message {
+      margin-top: 15px;
+      color: #d00000;
+      font-weight: bold;
+      display: none;
+    }
+
+    .invalid-message.show {
+      display: block;
     }
 
     /* PHOTO VIEWER */
@@ -468,12 +511,12 @@
               <div class="file-name">Archived files</div>
             </button>
 
-            <div class="file-item">
+            <button class="file-item" onclick="openOldFolders()">
               <div class="file-preview">
                 <div class="file-icon">📦</div>
               </div>
               <div class="file-name">Old folders</div>
-            </div>
+            </button>
           </div>
         `;
 
@@ -501,6 +544,66 @@
       `;
 
       status.textContent = "1 item";
+    }
+
+    function openOldFolders() {
+      const title = document.getElementById("windowTitle");
+      const content = document.getElementById("windowContent");
+      const status = document.getElementById("windowStatus");
+
+      title.textContent = "Old folders";
+      setPath(["Desktop", "ARCHIVES", "Old folders"]);
+
+      content.innerHTML = `
+        <div class="passcode-box">
+          <h2>Enter Passcode</h2>
+
+          <input
+            class="passcode-input"
+            id="passcodeInput"
+            type="text"
+            inputmode="numeric"
+            maxlength="4"
+            placeholder="Enter 4 digits"
+            autocomplete="off"
+          >
+
+          <br>
+
+          <button class="passcode-submit" onclick="checkPasscode()">
+            ENTER
+          </button>
+
+          <div class="invalid-message" id="invalidMessage">
+            INVALID
+          </div>
+        </div>
+      `;
+
+      status.textContent = "Passcode required";
+
+      const input = document.getElementById("passcodeInput");
+
+      input.addEventListener("input", function() {
+        this.value = this.value.replace(/\D/g, "").slice(0, 4);
+      });
+
+      input.addEventListener("keydown", function(event) {
+        if (event.key === "Enter") {
+          checkPasscode();
+        }
+      });
+    }
+
+    function checkPasscode() {
+      const input = document.getElementById("passcodeInput");
+      const message = document.getElementById("invalidMessage");
+
+      if (!input || !message) return;
+
+      message.classList.add("show");
+      input.value = "";
+      input.placeholder = "INVALID";
     }
 
     function closeFolder() {
